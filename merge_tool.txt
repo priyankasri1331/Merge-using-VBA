@@ -1,0 +1,26 @@
+Sub MergedatafromWorkbooks()
+Dim wbk As Workbook
+Dim wbk1 As Workbook
+Dim Filename As String
+Dim Path As String
+'To read the path from cell A10
+ With ThisWorkbook
+    Path = Sheets("Sheet1").Range("A10").Value
+  End With
+'get the name of the file
+Filename = Dir(Path & "*.xlsx")
+Do While Len(Filename) > 0
+'open the excel file
+Set wbk = Workbooks.Open(Path & Filename)
+wbk.Activate
+ActiveSheet.Range("A4:AS500").Select
+Selection.Copy
+Windows("Merge.xlsx").Activate
+Application.DisplayAlerts = False
+Range("A1:A5000").Find("End of Table").Select
+ActiveSheet.Paste
+wbk.Close True
+Filename = Dir
+Loop
+MsgBox "All the files are copied and pasted in merge.xlsx"
+End Sub
